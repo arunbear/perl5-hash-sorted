@@ -2,6 +2,7 @@ package Hash::Sorted;
 
 require v5.6.0;
 use Attribute::Handlers;
+use Carp;
 use DB_File;
 use strict;
 use vars qw( $VERSION );
@@ -10,12 +11,19 @@ $VERSION = '0.01';
 
 sub UNIVERSAL::Sorted : ATTR(HASH) {
     my ($package, $symbol, $referent, $attr, $data) = @_;
+    if(ref $data eq 'ARRAY') {
+        if(ref $data->[0] eq 'CODE') {
+            $DB_BTREE->{'compare'} = $data->[0];
+        } 
+        else {
+            croak('Not a coderef');
+        }
+    } 
+    elsif($data) {
+        croak("Invalid argument $data given to attribute");
+    }
     tie %$referent, "DB_File", undef, undef, undef, $DB_BTREE;
 } 
-
-# Preloaded methods go here.
-
-# Autoload methods go after =cut, and are processed by the autosplit program.
 
 1;
 __END__

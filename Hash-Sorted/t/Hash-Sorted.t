@@ -12,18 +12,36 @@ use Test::More qw(no_plan);
 #use Test::More tests => 1;
 BEGIN { use_ok('Hash::Sorted') };
 
-my %capital : Sorted;
-
-$capital{'France'}  = 'Paris';
-$capital{'England'} = 'London';
-$capital{'Hungary'} = 'Budapest';
-$capital{'Ireland'} = 'Dublin';
-$capital{'Egypt'}   = 'Cairo';
-$capital{'Germany'} = 'Berlin';
-
 my @keys = qw/Egypt England France Germany Hungary Ireland/;
-is_deeply([keys %capital], \@keys, 'check keys list');
-is_deeply([values %capital], [qw/Cairo London Paris Berlin Budapest Dublin/], 'check values list');
+{
+    my %capital : Sorted;
+
+    $capital{'France'}  = 'Paris';
+    $capital{'England'} = 'London';
+    $capital{'Hungary'} = 'Budapest';
+    $capital{'Ireland'} = 'Dublin';
+    $capital{'Egypt'}   = 'Cairo';
+    $capital{'Germany'} = 'Berlin';
+
+    is_deeply([keys %capital], \@keys, 'check keys list');
+    is_deeply([values %capital], [qw/Cairo London Paris Berlin Budapest Dublin/], 'check values list');
+}
+
+# Custom sorting
+
+{
+    my %capital : Sorted(sub { $_[1] cmp $_[0] });
+
+    $capital{'France'}  = 'Paris';
+    $capital{'England'} = 'London';
+    $capital{'Hungary'} = 'Budapest';
+    $capital{'Ireland'} = 'Dublin';
+    $capital{'Egypt'}   = 'Cairo';
+    $capital{'Germany'} = 'Berlin';
+
+    is_deeply([keys %capital], [reverse @keys], 'check keys list (reverse sort)');
+}
+
 __END__
 
 
