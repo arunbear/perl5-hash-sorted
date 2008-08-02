@@ -1,0 +1,6 @@
+Changes
+Makefile.PL
+MANIFEST
+README
+t/Hash-Sorted.t
+lib/Hash/Sorted.pm
