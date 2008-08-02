@@ -2,6 +2,7 @@ package Hash::Sorted;
 
 require v5.6.0;
 use Attribute::Handlers;
+use DB_File;
 use strict;
 use vars qw( $VERSION );
 
@@ -9,7 +10,7 @@ $VERSION = '0.01';
 
 sub UNIVERSAL::Sorted : ATTR(HASH) {
     my ($package, $symbol, $referent, $attr, $data) = @_;
-    ;
+    tie %$referent, "DB_File", undef, undef, undef, $DB_BTREE;
 } 
 
 # Preloaded methods go here.

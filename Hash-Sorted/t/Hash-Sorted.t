@@ -8,15 +8,24 @@ use warnings;
 
 # change 'tests => 1' to 'tests => last_test_to_print';
 
-use Test::More tests => 1;
+use Test::More qw(no_plan);
+#use Test::More tests => 1;
 BEGIN { use_ok('Hash::Sorted') };
 
 my %capital : Sorted;
 
+$capital{'France'}  = 'Paris';
+$capital{'England'} = 'London';
+$capital{'Hungary'} = 'Budapest';
+$capital{'Ireland'} = 'Dublin';
+$capital{'Egypt'}   = 'Cairo';
+$capital{'Germany'} = 'Berlin';
+
+my @keys = qw/Egypt England France Germany Hungary Ireland/;
+is_deeply([keys %capital], \@keys, 'check keys list');
+is_deeply([values %capital], [qw/Cairo London Paris Berlin Budapest Dublin/], 'check values list');
 __END__
 
-ok(keys %capital == 0, 'Empty hash - no keys');
-ok(! exists $capital{'France'}, 'exists on empty hash');
 
 $capital{'France'} = 'Paris';
 
